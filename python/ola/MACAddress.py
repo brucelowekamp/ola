@@ -52,14 +52,14 @@ class MACAddress(object):
     return self.__str__()
 
   def __eq__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return False
     return self.mac_address == other.mac_address
 
   def __lt__(self, other):
     if other is None:
       return False
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self.mac_address < other.mac_address
 
@@ -69,23 +69,23 @@ class MACAddress(object):
   def __le__(self, other):
     if other is None:
       return False
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self < other or self == other
 
   def __gt__(self, other):
     if other is None:
       return True
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.mac_address > other.mac_address
+    return not self <= other
 
   def __ge__(self, other):
     if other is None:
       return True
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self > other or self == other
+    return not self < other
 
   def __ne__(self, other):
     return not self == other
