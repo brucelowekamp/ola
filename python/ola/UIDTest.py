@@ -16,6 +16,7 @@
 # UIDTest.py
 # Copyright (C) 2005 Simon Newton
 
+import itertools
 import sys
 import unittest
 from ola.UID import UID, UIDOutOfRangeException
@@ -26,6 +27,15 @@ __author__ = 'nomis52@gmail.com (Simon Newton)'
 
 
 class UIDTest(unittest.TestCase):
+
+  def allNotEqual(self, t):
+    for pair in itertools.combinations(t, 2):
+      self.assertNotEqual(pair[0], pair[1])
+
+  def allHashNotEqual(self, t):
+    h = map(hash, t)
+    for pair in itertools.combinations(h, 2):
+      self.assertNotEqual(pair[0], pair[1])
 
   def testBasic(self):
     uid = UID(0x707a, 0x12345678)
@@ -68,8 +78,8 @@ class UIDTest(unittest.TestCase):
     u2 = UID(0x4845, 0x0000022e)
     u3 = UID(0x4844, 0x0000022e)
     u4 = UID(0x4846, 0x0000022e)
-    uids = sorted([u1, u2, u3, u4])
-    self.assertEqual([u3, u2, u1, u4], uids)
+    uids = sorted([u1, u2, None, u3, u4])
+    self.assertEqual([None, u3, u2, u1, u4], uids)
 
   def testNextAndPrevious(self):
     u1 = UID(0x4845, 0xfffffffe)
@@ -89,6 +99,48 @@ class UIDTest(unittest.TestCase):
     all_uids = UID.AllDevices()
     self.assertRaises(UIDOutOfRangeException, UID.NextUID, all_uids)
 
+  def testCmp(self):
+    u2 = UID(0x4845, 0x0000022e)
+    u3 = UID(0x4844, 0x0000022e)
+    u3a = UID(0x4844, 0x0000022e)
+    u4 = UID(0x4844, 0x00000230)
+    #self.assertEqual([u3, u2, u1, u4], uids)
+
+    self.assertEqual(u3, u3a)
+    self.assertTrue(u3 <= u3a)
+    self.assertTrue(u3 >= u3a)
+    
+    self.assertTrue(u3 < u2)
+    self.assertTrue(u2 > u3)
+    self.assertTrue(u3 <= u2)
+    self.assertTrue(u2 >= u3)
+    self.assertTrue(u3 != u2)
+
+    self.assertFalse(u3 > u2)
+    self.assertFalse(u2 < u3)
+    self.assertFalse(u3 >= u2)
+    self.assertFalse(u2 <= u3)
+    self.assertFalse(u3 == u2)
+
+    self.assertNotEqual(u3, u4)
+    self.assertFalse(u3 == u4)
+    self.assertTrue(u3 < u4)
+    self.assertFalse(u4 < u3)
+
+    self.assertEqual(u2.__lt__( "hello"), NotImplemented)
+    self.assertNotEqual(u2, "hello")
+
+    # None case
+    self.assertFalse(u3 < None)
+    self.assertTrue(u3 > None)
+    self.assertFalse(u3 <= None)
+    self.assertTrue(u3 >= None)
+    self.assertTrue(u3 != None)
+    self.assertFalse(u3 == None)
+
+    self.allNotEqual([u2, u3, u4])
+    self.allHashNotEqual([u2, u3, u4])
+    
 
 if __name__ == '__main__':
   unittest.main()
