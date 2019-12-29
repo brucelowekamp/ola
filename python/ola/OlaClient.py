@@ -87,32 +87,40 @@ class Plugin(object):
                     enabled=self.enabled)
 
   def __eq__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return False
-    return self.id == other.id
+    return (self.id == other.id and self.name == other.name and
+            self.active == other.active and self.enabled == other.enabled)
 
   def __lt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.id < other.id
+    if (self.id != other.id):
+      return self.id < other.id
+    elif (self.name != other.name):
+      return self.name < other.name
+    elif (self.active != other.active):
+      return self.active < other.active
+    else:
+      return self.enabled < other.enabled
 
   # These 4 can be replaced with functools.total_ordering when support for 2.7
   # is dropped because NotImplemented is not supported by it before 3.4
 
   def __le__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self < other or self == other
 
   def __gt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.id > other.id
+    return not self.id <= other.id
 
   def __ge__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self > other or self == other
+    return not self < other
 
   def __ne__(self, other):
     return not self == other
@@ -193,32 +201,45 @@ class Device(object):
                     nr_outputs=len(self.output_ports))
 
   def __eq__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return False
-    return self.alias == other.alias
+    return (self.id == other.id and self.alias == other.alias and self.name == other.name and
+            self.plugin_id == other.plugin_id and self.input_ports == other.input_ports and
+            self.output_ports == other.output_ports)
 
   def __lt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.alias < other.alias
+    elif (self.id != other.id):
+      return self.id < other.id
+    elif (self.alias != other.alias):
+      return self.alias < other.alias
+    elif (self.name != other.name):
+      return self.name < other.name
+    elif (self.plugin_id != other.plugin_id):
+      return self.plugin_id < other.plugin_id
+    elif (self.input_ports != other.input_ports):
+      return self.input_ports < other.input_ports
+    else:
+      return self.output_ports < other.output_ports
 
   # These 4 can be replaced with functools.total_ordering when support for 2.7
   # is dropped because NotImplemented is not supported by it before 3.4
 
   def __le__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self < other or self == other
 
   def __gt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.alias > other.alias
+    return not self <= other
 
   def __ge__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self > other or self == other
+    return not self < other
 
   def __ne__(self, other):
     return not self == other
@@ -280,32 +301,44 @@ class Port(object):
                     supports_rdm=self.supports_rdm)
 
   def __eq__(self, other):
-    if other.__class__ is not self.__class__:
-      return NotImplemented
-    return self.id == other.id
+    if not isinstance(other, self.__class__):
+      return False
+    return (self.id == other.id and self.universe == other.universe and
+            self.active == other.active and self.description == other.description and
+            self.supports_rdm == other.supports_rdm)
 
   def __lt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.id < other.id
+    elif (self.id != other.id):
+      return self.id < other.id
+    elif (self.universe != other.universe):
+      return self.universe < other.universe
+    elif (self.active != other.active):
+      return self.active < other.active
+    elif (self.description != other.description):
+      return self.description < other.description
+    else:
+      return self.supports_rdm < other.supports_rdm
 
+  
   # These 4 can be replaced with functools.total_ordering when support for 2.7
   # is dropped because NotImplemented is not supported by it before 3.4
 
   def __le__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self < other or self == other
 
   def __gt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.id > other.id
+    return not self <= other
 
   def __ge__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self > other or self == other
+    return not self < other
 
   def __ne__(self, other):
     return not self == other
@@ -373,12 +406,12 @@ class Universe(object):
                     merge_mode=merge_mode)
 
   def __eq__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return False
     return self.id == other.id
 
   def __lt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self.id < other.id
 
@@ -386,19 +419,19 @@ class Universe(object):
   # is dropped because NotImplemented is not supported by it before 3.4
 
   def __le__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self < other or self == other
 
   def __gt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.id > other.id
+    return not self <= other
 
   def __ge__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self > other or self == other
+    return not self < other
 
   def __ne__(self, other):
     return not self == other
@@ -473,32 +506,35 @@ class RDMNack(object):
                     desc=self.description)
 
   def __eq__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return False
-    return self.value == other.value
+    return self.value == other.value and self.description == other.description
 
   def __lt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.value < other.value
+    elif self.value != other.value:
+      return self.value < other.value
+    else:
+      return self.description < other.description
 
   # These 4 can be replaced with functools.total_ordering when support for 2.7
   # is dropped because NotImplemented is not supported by it before 3.4
 
   def __le__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
     return self < other or self == other
 
   def __gt__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self.value > other.value
+    return not self <= other
 
   def __ge__(self, other):
-    if other.__class__ is not self.__class__:
+    if not isinstance(other, self.__class__):
       return NotImplemented
-    return self > other or self == other
+    return not self < other
 
   def __ne__(self, other):
     return not self == other
