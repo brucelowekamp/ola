@@ -32,7 +32,6 @@ __author__ = 'nomis52@gmail.com (Simon Newton)'
 """The port that the OLA server listens on."""
 OLA_PORT = 9010
 
-
 class Error(Exception):
   """The base error class."""
 
@@ -89,20 +88,12 @@ class Plugin(object):
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
-    return (self.id == other.id and self.name == other.name and
-            self.active == other.active and self.enabled == other.enabled)
+    return self.id == other.id
 
   def __lt__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
-    if (self.id != other.id):
-      return self.id < other.id
-    elif (self.name != other.name):
-      return self.name < other.name
-    elif (self.active != other.active):
-      return self.active < other.active
-    else:
-      return self.enabled < other.enabled
+    return self.id < other.id
 
   # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
@@ -113,7 +104,7 @@ class Plugin(object):
   def __gt__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
-    return not self.id <= other.id
+    return not self <= other
 
   def __ge__(self, other):
     if not isinstance(other, self.__class__):
@@ -124,7 +115,7 @@ class Plugin(object):
     return not self == other
 
   def __hash__(self):
-    return hash((self._id, self._name, self._active, self._enabled))
+    return hash(self._id)
 
 
 # Populate the Plugin class attributes from the protobuf
@@ -201,25 +192,12 @@ class Device(object):
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
-    return (self.id == other.id and self.alias == other.alias and self.name == other.name and
-            self.plugin_id == other.plugin_id and self.input_ports == other.input_ports and
-            self.output_ports == other.output_ports)
+    return self.alias == other.alias
 
   def __lt__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
-    elif (self.id != other.id):
-      return self.id < other.id
-    elif (self.alias != other.alias):
-      return self.alias < other.alias
-    elif (self.name != other.name):
-      return self.name < other.name
-    elif (self.plugin_id != other.plugin_id):
-      return self.plugin_id < other.plugin_id
-    elif (self.input_ports != other.input_ports):
-      return self.input_ports < other.input_ports
-    else:
-      return self.output_ports < other.output_ports
+    return self.alias < other.alias
 
   # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
@@ -299,24 +277,12 @@ class Port(object):
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
-    return (self.id == other.id and self.universe == other.universe and
-            self.active == other.active and self.description == other.description and
-            self.supports_rdm == other.supports_rdm)
+    return self.id == other.id
 
   def __lt__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
-    elif (self.id != other.id):
-      return self.id < other.id
-    elif (self.universe != other.universe):
-      return self.universe < other.universe
-    elif (self.active != other.active):
-      return self.active < other.active
-    elif (self.description != other.description):
-      return self.description < other.description
-    else:
-      return self.supports_rdm < other.supports_rdm
-
+    return self.id < other.id
   
   # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
@@ -338,8 +304,7 @@ class Port(object):
     return not self == other
 
   def __hash__(self):
-    return hash((self._id, self._universe, self._active, self._description,
-                 self._supports_rdm))
+    return hash(self._id)
 
 
 class Universe(object):
@@ -500,15 +465,12 @@ class RDMNack(object):
   def __eq__(self, other):
     if not isinstance(other, self.__class__):
       return False
-    return self.value == other.value and self.description == other.description
+    return self.value == other.value
 
   def __lt__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
-    elif self.value != other.value:
-      return self.value < other.value
-    else:
-      return self.description < other.description
+    return self.value < other.value
 
   # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
@@ -530,7 +492,7 @@ class RDMNack(object):
     return not self == other
 
   def __hash__(self):
-    return hash((self._value, self._description))
+    return hash(self._value)
 
   @classmethod
   def LookupCode(cls, code):
