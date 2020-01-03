@@ -55,12 +55,10 @@ class _Event(object):
       return NotImplemented
     if (self._run_at != other._run_at):
       return self._run_at < other._run_at
-    # force ordering for equal time events
-    return hash(self._callback) < hash(other._callback)
+    # force total ordering for equal time events
+    return hash(self) < hash(other)
 
-  # These 4 are defined in terms of the above and can be replaced with
-  # functools.total_ordering when support for 2.7 is dropped because
-  # NotImplemented is not supported by it before 3.4
+  # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
@@ -77,8 +75,6 @@ class _Event(object):
     return not self < other
 
   def __ne__(self, other):
-    if not isinstance(other, self.__class__):
-      return NotImplemented
     return not self == other
 
   def __hash__(self):

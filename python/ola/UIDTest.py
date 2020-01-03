@@ -43,10 +43,7 @@ class UIDTest(unittest.TestCase):
     self.assertEqual(0x12345678, uid.device_id)
     self.assertEqual('707a:12345678', str(uid))
 
-    # Python 3 does not allow sorting of incompatible types.
-    # We don't use sys.version_info.major to support Python 2.6.
-    if sys.version_info[0] == 2:
-        self.assertTrue(uid > None)
+    self.assertTrue(uid > None)
 
     uid2 = UID(0x707a, 0x12345679)
     self.assertTrue(uid2 > uid)

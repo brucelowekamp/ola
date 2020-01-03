@@ -104,9 +104,7 @@ class Plugin(object):
     else:
       return self.enabled < other.enabled
 
-  # These 4 can be replaced with functools.total_ordering when support for 2.7
-  # is dropped because NotImplemented is not supported by it before 3.4
-
+  # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
@@ -223,9 +221,7 @@ class Device(object):
     else:
       return self.output_ports < other.output_ports
 
-  # These 4 can be replaced with functools.total_ordering when support for 2.7
-  # is dropped because NotImplemented is not supported by it before 3.4
-
+  # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
@@ -322,9 +318,7 @@ class Port(object):
       return self.supports_rdm < other.supports_rdm
 
   
-  # These 4 can be replaced with functools.total_ordering when support for 2.7
-  # is dropped because NotImplemented is not supported by it before 3.4
-
+  # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
@@ -415,9 +409,7 @@ class Universe(object):
       return NotImplemented
     return self.id < other.id
 
-  # These 4 can be replaced with functools.total_ordering when support for 2.7
-  # is dropped because NotImplemented is not supported by it before 3.4
-
+  # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented
@@ -518,9 +510,7 @@ class RDMNack(object):
     else:
       return self.description < other.description
 
-  # These 4 can be replaced with functools.total_ordering when support for 2.7
-  # is dropped because NotImplemented is not supported by it before 3.4
-
+  # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
     if not isinstance(other, self.__class__):
       return NotImplemented

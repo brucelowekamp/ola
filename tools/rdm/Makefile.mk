@@ -55,6 +55,16 @@ launcher_files = \
 
 EXTRA_DIST += $(launcher_files)
 
+dist_check_SCRIPTS += \
+   tools/rdm/TestStateTest.py \
+   tools/rdm/ResponderTestTest.py
+
+if BUILD_PYTHON_LIBS
+test_scripts += \
+   tools/rdm/TestStateTest.py \
+   tools/rdm/ResponderTestTest.py
+endif
+
 CLEANFILES += tools/rdm/*.pyc
 
 if INSTALL_RDM_TESTS
