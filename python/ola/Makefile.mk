@@ -60,7 +60,7 @@ python/ola/Version.py: python/ola/Makefile.mk configure.ac config/ola_version.m4
 
 dist_check_SCRIPTS += \
     python/ola/DUBDecoderTest.py \
-    python/ola/EventTest.py \
+    python/ola/ClientWrapperTest.py \
     python/ola/MACAddressTest.py \
     python/ola/OlaClientTest.py \
     python/ola/UIDTest.py
@@ -68,7 +68,7 @@ dist_check_SCRIPTS += \
 if BUILD_PYTHON_LIBS
 test_scripts += \
     python/ola/DUBDecoderTest.py \
-    python/ola/EventTest.py \
+    python/ola/ClientWrapperTest.py \
     python/ola/MACAddressTest.py \
     python/ola/OlaClientTest.py \
     python/ola/UIDTest.py
