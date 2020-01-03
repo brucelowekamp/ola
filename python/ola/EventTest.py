@@ -114,42 +114,38 @@ class EventTest(unittest.TestCase):
     sockets = socket.socketpair()
     wrapper = ClientWrapper(sockets[0])
     class results:
-      a_called = False
-      b_called = False
-      c_called = False
-      d_called = False
+      a_called = None
+      b_called = None
+      c_called = None
+      d_called = None
       
     def a():
-      self.a_time = datetime.datetime.now()
-      self.assertFalse(results.a_called)
-      self.assertFalse(results.b_called)
-      self.assertFalse(results.c_called)
-      self.assertFalse(results.d_called)
-      results.a_called = True
+      self.assertIsNone(results.a_called)
+      self.assertIsNone(results.b_called)
+      self.assertIsNone(results.c_called)
+      self.assertIsNone(results.d_called)
+      results.a_called = datetime.datetime.now()
       
     def b():
-      self.b_time = datetime.datetime.now()
-      self.assertTrue(results.a_called)
-      self.assertFalse(results.b_called)
-      self.assertFalse(results.c_called)
-      self.assertFalse(results.d_called)
-      results.b_called = True
+      self.assertIsNotNone(results.a_called)
+      self.assertIsNone(results.b_called)
+      self.assertIsNone(results.c_called)
+      self.assertIsNone(results.d_called)
+      results.b_called = datetime.datetime.now()
 
     def c():
-      self.c_time = datetime.datetime.now()
-      self.assertTrue(results.a_called)
-      self.assertTrue(results.b_called)
-      self.assertFalse(results.c_called)
-      self.assertFalse(results.d_called)
-      results.c_called = True
+      self.assertIsNotNone(results.a_called)
+      self.assertIsNotNone(results.b_called)
+      self.assertIsNone(results.c_called)
+      self.assertIsNone(results.d_called)
+      results.c_called = datetime.datetime.now()
 
     def d():
-      self.d_time = datetime.datetime.now()
-      self.assertTrue(results.a_called)
-      self.assertTrue(results.b_called)
-      self.assertTrue(results.c_called)
-      self.assertFalse(results.d_called)
-      results.d_called = True
+      self.assertIsNotNone(results.a_called)
+      self.assertIsNotNone(results.b_called)
+      self.assertIsNotNone(results.c_called)
+      self.assertIsNone(results.d_called)
+      results.d_called = datetime.datetime.now()
       wrapper.AddEvent(0, wrapper.Stop)
 
 
@@ -159,22 +155,23 @@ class EventTest(unittest.TestCase):
     wrapper.AddEvent(datetime.timedelta(milliseconds=5), b)
     wrapper.AddEvent(10, c)
 
-    self.assertFalse(results.a_called)
-    self.assertFalse(results.b_called)
-    self.assertFalse(results.c_called)
-    self.assertFalse(results.d_called)
+    self.assertIsNone(results.a_called)
+    self.assertIsNone(results.b_called)
+    self.assertIsNone(results.c_called)
+    self.assertIsNone(results.d_called)
 
     self.start = datetime.datetime.now()
     wrapper.Run()
-    
-    self.assertTrue(results.a_called)
-    self.assertTrue(self.a_time - self.start < datetime.timedelta(milliseconds=5))
-    self.assertTrue(results.b_called)
-    self.assertTrue(self.b_time - self.start >= datetime.timedelta(milliseconds=5))
-    self.assertTrue(results.c_called)
-    self.assertTrue(self.c_time - self.start >= datetime.timedelta(milliseconds=10))
-    self.assertTrue(results.d_called)
-    self.assertTrue(self.d_time - self.start >= datetime.timedelta(milliseconds=15))
+
+    self.assertIsNotNone(results.a_called)
+    self.assertIsNotNone(results.b_called)
+    self.assertIsNotNone(results.c_called)
+    self.assertIsNotNone(results.d_called)
+
+    self.assertTrue(results.a_called - self.start < datetime.timedelta(milliseconds=5))
+    self.assertTrue(results.b_called - self.start >= datetime.timedelta(milliseconds=5))
+    self.assertTrue(results.c_called - self.start >= datetime.timedelta(milliseconds=10))
+    self.assertTrue(results.d_called - self.start >= datetime.timedelta(milliseconds=15))
 
     sockets[0].close()
     sockets[1].close()
