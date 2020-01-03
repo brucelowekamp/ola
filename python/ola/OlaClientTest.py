@@ -19,7 +19,8 @@ import itertools
 import unittest
 from ola.OlaClient import *
 
-"""Test cases for data structures of OlaClient."""
+"""Test cases for data structures of OlaClient.
+   SendDMX is tested with ClientWrapper."""
 
 __author__ = 'bruce@lowekamp.net (Bruce Lowekamp)'
 
@@ -122,7 +123,6 @@ class OlaClientTest(unittest.TestCase):
 
     self.assertEqual(a.__lt__( "hello"), NotImplemented)
     self.assertNotEqual(a, "hello")
-    
     
 if __name__ == '__main__':
   unittest.main()

@@ -15,6 +15,7 @@
 #
 # EventTest.py
 
+import array
 import datetime
 import socket
 import sys
@@ -176,5 +177,29 @@ class EventTest(unittest.TestCase):
     sockets[0].close()
     sockets[1].close()
 
+  @timeout_decorator.timeout(2)
+  def testSend(self):
+    """tests that data goes out on the wire with SendDMX"""
+    sockets = socket.socketpair()
+    wrapper = ClientWrapper(sockets[0])
+
+    class results:
+      gotdata = False
+      
+    def DataCallback(self):
+      data = sockets[1].recv(4096)
+      self.assertTrue(len(data)>100)
+      results.gotdata = True
+      wrapper.AddEvent(0, wrapper.Stop)
+
+    wrapper._ss.AddReadDescriptor(sockets[1], lambda: DataCallback(self))
+    self.assertTrue(wrapper.Client().SendDmx(1, array.array('B', [0]*100),
+                                             None))
+    
+    wrapper.Run()
+
+    self.assertTrue(results.gotdata)
+
+    
 if __name__ == '__main__':
   unittest.main()
