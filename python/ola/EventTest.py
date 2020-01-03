@@ -16,6 +16,7 @@
 # EventTest.py
 
 import datetime
+import socket
 import sys
 import timeout_decorator
 import unittest
@@ -37,6 +38,8 @@ class EventTest(unittest.TestCase):
     b2._run_at = b._run_at # tests rely on timestamps being actually equal
     b3 = _Event (1, 2)
     b3._run_at = b._run_at
+    c = _Event (1, 3)
+    c._run_at = b._run_at
     
     self.assertEqual(b, b2)
     self.assertNotEqual(b, b3)
@@ -53,7 +56,9 @@ class EventTest(unittest.TestCase):
     self.assertFalse(b <= a)
     self.assertFalse(a > b)
     self.assertFalse(a >= b)
-
+    self.assertTrue(b3 < c)
+    self.assertFalse(c < b3)
+    
     # these depend on hash(None) < hash(2)
     self.assertTrue (b < b3)
     self.assertFalse(b > b3)
@@ -69,16 +74,19 @@ class EventTest(unittest.TestCase):
     b2._run_at = b._run_at
     b3 = _Event (1, 2)
     b3._run_at = b._run_at
-
+    c = _Event(1, 4)
+    c._run_at = b._run_at
+    
     self.assertEqual(hash(a), hash(a))
     self.assertNotEqual(hash(a), hash(b))
     self.assertEqual(hash(b), hash(b2))
     self.assertNotEqual(hash(b), hash(b3))
-
+    self.assertNotEqual(hash(b), hash(c))
 
   @timeout_decorator.timeout(2)
   def testBasic(self):
-    wrapper = ClientWrapper()
+    sockets = socket.socketpair()
+    wrapper = ClientWrapper(sockets[0])
     class results:
       a_called = False
       b_called = False
@@ -97,10 +105,14 @@ class EventTest(unittest.TestCase):
     self.assertTrue(results.a_called)
     self.assertTrue(results.b_called)
 
+    sockets[0].close()
+    sockets[1].close()
+
 
   @timeout_decorator.timeout(2)
   def testEventLoop(self):
-    wrapper = ClientWrapper()
+    sockets = socket.socketpair()
+    wrapper = ClientWrapper(sockets[0])
     class results:
       a_called = False
       b_called = False
@@ -164,7 +176,8 @@ class EventTest(unittest.TestCase):
     self.assertTrue(results.d_called)
     self.assertTrue(self.d_time - self.start >= datetime.timedelta(milliseconds=15))
 
-
+    sockets[0].close()
+    sockets[1].close()
 
 if __name__ == '__main__':
   unittest.main()

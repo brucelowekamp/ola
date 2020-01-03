@@ -31,6 +31,13 @@ from ola.OlaClient import OlaClient
 
 __author__ = 'nomis52@gmail.com (Simon Newton)'
 
+def LTWithNone(a, b):
+  """None-ordered < for python 3"""
+  if b is None: # also handles both None though shouldn't be used for that
+    return False
+  elif a is None:
+    return True
+  return a < b
 
 class _Event(object):
   """An _Event represents a timer scheduled to expire in the future.
@@ -55,8 +62,7 @@ class _Event(object):
       return NotImplemented
     if (self._run_at != other._run_at):
       return self._run_at < other._run_at
-    # force total ordering for equal time events
-    return hash(self) < hash(other)
+    return LTWithNone(self._callback, other._callback)
 
   # Remove these 4 when support for 2.6 is dropped and add functools.total_ordering
   def __le__(self, other):
@@ -239,14 +245,14 @@ class SelectServer(object):
     # descriptors).
     self.RemoveReadDescriptor(self._local_socket[0])
 
-  def AddEvent(self, time_in_ms, callback):
+  def AddEvent(self, delay, callback):
     """Schedule an event to run in the future.
 
     Args:
-      time_in_ms: An interval in milliseconds when this should run.
+      delay: timedelta or number of ms before this event fires
       callback: The function to run.
     """
-    event = _Event(time_in_ms, callback)
+    event = _Event(delay, callback)
     heapq.heappush(self._events, event)
 
   def _CheckTimeouts(self, now):
@@ -291,9 +297,9 @@ class SelectServer(object):
 
 
 class ClientWrapper(object):
-  def __init__(self):
+  def __init__(self, socket=None):
     self._ss = SelectServer()
-    self._client = OlaClient()
+    self._client = OlaClient(socket)
     self._ss.AddReadDescriptor(self._client.GetSocket(),
                                self._client.SocketReady)
 
