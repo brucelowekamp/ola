@@ -70,7 +70,9 @@ test_scripts += \
    tools/rdm/ResponderTestTest.sh
 endif
 
-CLEANFILES += tools/rdm/*.pyc
+CLEANFILES += \
+   tools/rdm/*.pyc \
+   tools/rdm/ResponderTestTest.sh
 
 if INSTALL_RDM_TESTS
 

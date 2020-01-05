@@ -84,5 +84,8 @@ test_scripts += \
     python/ola/UIDTest.py
 endif
 
-CLEANFILES += python/ola/*.pyc
+CLEANFILES += \
+    python/ola/*.pyc \
+    python/ola/ClientWrapperTest.sh \
+    python/ola/OlaClientTest.sh
 
