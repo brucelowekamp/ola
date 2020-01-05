@@ -55,6 +55,11 @@ launcher_files = \
 
 EXTRA_DIST += $(launcher_files)
 
+tools/rdm/ResponderTestTest.sh: tools/rdm/Makefile.mk
+	mkdir -p $(top_builddir)/python/ola
+	echo "export PYTHONPATH=${top_builddir}/python:${top_srcdir}/python; $(PYTHON) ${srcdir}/tools/rdm/ResponderTestTest.py; exit \$$?" > $(top_builddir)/tools/rdm/ResponderTestTest.sh
+	chmod +x $(top_builddir)/tools/rdm/ResponderTestTest.sh
+
 dist_check_SCRIPTS += \
    tools/rdm/TestStateTest.py \
    tools/rdm/ResponderTestTest.py
@@ -62,7 +67,7 @@ dist_check_SCRIPTS += \
 if BUILD_PYTHON_LIBS
 test_scripts += \
    tools/rdm/TestStateTest.py \
-   tools/rdm/ResponderTestTest.py
+   tools/rdm/ResponderTestTest.sh
 endif
 
 CLEANFILES += tools/rdm/*.pyc
