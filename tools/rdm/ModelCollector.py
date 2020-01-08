@@ -510,7 +510,7 @@ class ModelCollector(object):
              (response.pid, response.nack_reason))
       self._NextState()
     elif unpack_exception:
-      print unpack_exception
+      print (unpack_exception)
       self.wrapper.Stop()
     else:
       self._HandleResponse(unpacked_data)
@@ -534,11 +534,11 @@ class ModelCollector(object):
         logging.debug('Device doesn\'t support queued messages')
         self._NextState()
       else:
-        print 'Got nack for 0x%04hx with reason: %s' % (
-            response.pid, response.nack_reason)
+        print ('Got nack for 0x%04hx with reason: %s' % (
+            response.pid, response.nack_reason))
 
     elif unpack_exception:
-      print 'Invalid Param data: %s' % unpack_exception
+      print ('Invalid Param data: %s' % unpack_exception)
       self.queued_message_failures += 1
       if self.queued_message_failures >= 10:
         # declare this bad and move on
@@ -571,12 +571,12 @@ class ModelCollector(object):
       True if this response was an ACK or NACK, False for all other cases.
     """
     if not response.status.Succeeded():
-      print response.status.message
+      print (response.status.message)
       self.wrapper.Stop()
       return False
 
     if response.response_code != OlaClient.RDM_COMPLETED_OK:
-      print response.ResponseCodeAsString()
+      print (response.ResponseCodeAsString())
       self.wrapper.Stop()
       return False
 

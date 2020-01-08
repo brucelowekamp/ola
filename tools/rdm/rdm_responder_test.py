@@ -97,7 +97,7 @@ def ParseOptions():
   uid = UID.FromString(args[0])
   if uid is None:
     parser.print_usage()
-    print 'Invalid UID: %s' % args[0]
+    print ('Invalid UID: %s' % args[0])
     sys.exit(2)
 
   options.uid = uid
@@ -243,7 +243,7 @@ def main():
   test_classes = TestRunner.GetTestClasses(TestDefinitions)
   if options.list_tests:
     for test_name in sorted(c.__name__ for c in test_classes):
-      print test_name
+      print (test_name)
     sys.exit(0)
 
   SetupLogging(options)

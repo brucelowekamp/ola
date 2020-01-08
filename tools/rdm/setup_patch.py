@@ -151,7 +151,7 @@ def main():
     print ('Patched %d of %d ports' %
            (patch_results.ports_patched, patch_results.ports_found))
   else:
-    print 'Failed to patch'
+    print ('Failed to patch')
 
 
 if __name__ == '__main__':
