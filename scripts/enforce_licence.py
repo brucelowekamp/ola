@@ -25,7 +25,7 @@ import re
 import sys
 import textwrap
 
-CPP, JS, PROTOBUF, PYTHON = xrange(4)
+CPP, JS, PROTOBUF, PYTHON = range(4)
 
 IGNORED_DIRECTORIES = [
   'javascript/new-src/node_modules/',
@@ -66,7 +66,7 @@ IGNORED_FILES = [
 
 
 def Usage(arg0):
-  print (textwrap.dedent("""\
+  print(textwrap.dedent("""\
   Usage: %s
 
   Walk the directory tree from the current directory, and make sure all .cpp,
@@ -84,7 +84,7 @@ def ParseArgs():
     opts, args = getopt.getopt(sys.argv[1:], '',
                                ['diff', 'fix', 'help'])
   except getopt.GetoptError as err:
-    print (str(err))
+    print(str(err))
     Usage(sys.argv[0])
     sys.exit(2)
 
@@ -193,7 +193,7 @@ def ReplaceHeader(file_name, new_header, lang):
     line = f.readline()
 
   if breaks < 3:
-    print ("Couldn't find header for %s so couldn't fix it" % file_name)
+    print("Couldn't find header for %s so couldn't fix it" % file_name)
     f.close()
     return
 
@@ -234,7 +234,7 @@ def GetDirectoryLicences(root_dir):
       lines = f.readlines()
       f.close()
       licences[dir_name] = TransformLicence(lines)
-      print ('Found LICENCE for directory %s' % dir_name)
+      print('Found LICENCE for directory %s' % dir_name)
 
     # use this licence for all subdirs
     licence = licences.get(dir_name)
@@ -294,20 +294,20 @@ def CheckLicenceForFile(file_name, licence, lang, diff, fix):
   if header == licence:
     expected_line = TransformLine(os.path.basename(file_name), lang)
     if lang != JS and file_name_line.rstrip('\n') != expected_line:
-      print ("File %s does not have a filename line after the licence; found "
+      print("File %s does not have a filename line after the licence; found "
              "\"%s\" expected \"%s\"" %
              (file_name, file_name_line.rstrip('\n'), expected_line))
       return 1
     return 0
 
   if fix:
-    print ('Fixing %s' % file_name)
+    print('Fixing %s' % file_name)
     if lang == PYTHON and first_line is not None:
       licence = first_line + licence
     ReplaceHeader(file_name, licence, lang)
     return 1
   else:
-    print ("File %s does not start with \"%s...\"" % (
+    print("File %s does not start with \"%s...\"" % (
         file_name,
         licence.split('\n')[(0 if (lang == PYTHON) else 1)]))
     if diff:
@@ -323,7 +323,7 @@ def main():
   errors = 0
   for dir_name, licence in licences.iteritems():
     errors += CheckLicenceForDir(dir_name, licence, diff=diff, fix=fix)
-  print ('Found %d files with incorrect licences' % errors)
+  print('Found %d files with incorrect licences' % errors)
   if errors > 0:
     sys.exit(1)
   else:

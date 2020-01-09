@@ -623,7 +623,7 @@ class DownloadModelDataHandler(RequestHandler):
   """Take the data in the form and return it as a downloadable file."""
 
   def HandleRequest(self, request, response):
-    print (dir(request))
+    print(dir(request))
     model_data = request.PostParam('model_data') or ''
     logging.info(model_data)
 

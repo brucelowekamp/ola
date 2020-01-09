@@ -20,6 +20,7 @@ from ola.testing.rdm import TestDefinitions, TestRunner
 from ola.testing.rdm.DMXSender import DMXSender
 from ola.testing.rdm.TestState import TestState
 from ola.testing.rdm.TimingStats import TimingStats
+from builtins import input
 import datetime
 import logging
 import re
@@ -97,7 +98,7 @@ def ParseOptions():
   uid = UID.FromString(args[0])
   if uid is None:
     parser.print_usage()
-    print ('Invalid UID: %s' % args[0])
+    print('Invalid UID: %s' % args[0])
     sys.exit(2)
 
   options.uid = uid
@@ -243,7 +244,7 @@ def main():
   test_classes = TestRunner.GetTestClasses(TestDefinitions)
   if options.list_tests:
     for test_name in sorted(c.__name__ for c in test_classes):
-      print (test_name)
+      print(test_name)
     sys.exit(0)
 
   SetupLogging(options)
@@ -280,7 +281,7 @@ def main():
 
       if not options.skip_check:
         logging.info('Continue ? [Y/n]')
-        response = raw_input().strip().lower()
+        response = input().strip().lower()
         uid_ok = response == 'y' or response == ''
 
   logging.debug('Fetching UID list from server')

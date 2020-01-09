@@ -459,7 +459,7 @@ def main():
   try:
     PidStore.GetStore(pid_location)
   except PidStore.MissingPLASAPIDs as e:
-    print (e)
+    print(e)
     sys.exit()
 
   controller = InteractiveModeController(universe,

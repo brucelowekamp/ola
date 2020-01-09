@@ -16,6 +16,7 @@
 # Copyright (C) 2011 Simon Newton
 
 import array
+from builtins import range
 import logging
 
 __author__ = 'nomis52@gmail.com (Simon Newton)'
@@ -41,7 +42,7 @@ class DMXSender(object):
     if (frame_rate > 0 and slot_count > 0):
       logging.info('Sending %d FPS of DMX data with %d slots' %
                    (frame_rate, self._slot_count))
-      for i in xrange(0, self._slot_count):
+      for i in range(0, self._slot_count):
         self._data.append(0)
       self._frame_interval = 1000 / frame_rate
       self.SendDMXFrame()
@@ -51,7 +52,7 @@ class DMXSender(object):
 
   def SendDMXFrame(self):
     """Send the next DMX Frame."""
-    for i in xrange(0, self._slot_count):
+    for i in range(0, self._slot_count):
       self._data[i] = self._frame_count % 255
     self._frame_count += 1
     self._wrapper.Client().SendDmx(self._universe,

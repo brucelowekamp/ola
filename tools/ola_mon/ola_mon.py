@@ -21,6 +21,7 @@ import httplib
 import rrdtool
 import time
 import os.path
+from past.builtins import execfile
 import socket
 import sys
 import textwrap
@@ -192,15 +193,15 @@ def LoadConfig(config_file):
   keys = set(['OLAD_SERVERS', 'DATA_DIRECTORY', 'VARIABLES', 'WWW_DIRECTORY',
               'CDEFS'])
   if not keys.issubset(locals.keys()):
-    print ('Invalid config file')
+    print('Invalid config file')
     sys.exit(2)
 
   if not len(locals['OLAD_SERVERS']):
-    print ('No hosts defined')
+    print('No hosts defined')
     sys.exit(2)
 
   if not len(locals['VARIABLES']):
-    print ('No variables defined')
+    print('No variables defined')
     sys.exit(2)
 
   return locals
@@ -208,7 +209,7 @@ def LoadConfig(config_file):
 
 def Usage(binary):
   """Display the usage information."""
-  print (textwrap.dedent("""\
+  print(textwrap.dedent("""\
     Usage: %s [options]
 
     Start the OLAD monitoring system
@@ -221,7 +222,7 @@ def main():
   try:
     opts, args = getopt.getopt(sys.argv[1:], "hc:v", ["help", "config="])
   except getopt.GetoptError as err:
-    print (str(err))
+    print(str(err))
     Usage(sys.argv[0])
     sys.exit(2)
 
